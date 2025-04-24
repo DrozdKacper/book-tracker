@@ -1,5 +1,6 @@
 package kacper.book_tracker.controller;
 
+import kacper.book_tracker.dto.BookDTO;
 import kacper.book_tracker.entity.Book;
 import kacper.book_tracker.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
 
 
 @RequestMapping("/api/books")
@@ -21,7 +23,7 @@ public class BookController {
     }
 
     @GetMapping()
-    public Iterable<Book> getAllBooks() {
+    public List<BookDTO> getAllBooks() {
         return bookService.getAllBooks();
     }
 }
