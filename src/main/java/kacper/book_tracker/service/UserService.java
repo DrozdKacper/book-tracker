@@ -29,7 +29,7 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public String addUser(User user) {
+    public String registerUser(User user) {
         user.setPassword(encoder.encode(user.getPassword()));
         repository.save(user);
         return "User Added Successfully";
