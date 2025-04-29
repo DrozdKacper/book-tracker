@@ -1,10 +1,14 @@
 package kacper.book_tracker.controller;
 
+import kacper.book_tracker.dto.RegisterUserDto;
+import kacper.book_tracker.dto.UserTokenDto;
 import kacper.book_tracker.entity.User;
 import kacper.book_tracker.service.JwtService;
 import kacper.book_tracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,8 +25,8 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody User user) {
-        return service.registerUser(user);
+    public String registerUser(@RequestBody RegisterUserDto registerUserDto) {
+        return service.registerNewUserAccount(registerUserDto);
     }
 
 
