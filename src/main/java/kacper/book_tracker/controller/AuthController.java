@@ -2,7 +2,6 @@ package kacper.book_tracker.controller;
 
 import kacper.book_tracker.dto.AuthRequestDto;
 import kacper.book_tracker.dto.RegisterUserDto;
-import kacper.book_tracker.dto.UserTokenDto;
 import kacper.book_tracker.entity.User;
 import kacper.book_tracker.service.AuthService;
 import kacper.book_tracker.service.JwtService;

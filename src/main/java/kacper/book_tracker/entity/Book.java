@@ -1,9 +1,6 @@
 package kacper.book_tracker.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
@@ -11,8 +8,8 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
+@Table(name = "book")
 public class Book {
 
     @Id
@@ -20,6 +17,12 @@ public class Book {
     private int id;
     private String title;
     private String author;
+    private String description;
+    private String isbn;
+    private String publisher;
+    private Date publicationDate;
+    private String genre;
+    private Integer pageCount;
 
 
 }

@@ -7,21 +7,24 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@Data
 @Entity
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
-public class Review {
-
+@NoArgsConstructor
+public class UserBook {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String text;
-    @OneToOne
-    @JoinColumn(name = "Book_user_id")
-    private UserBook userBook;
-    private String title;
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
+    @ManyToOne
+    @JoinColumn(name ="list_id")
+    private BookList bookList;
     private Integer rating;
-    private Date createdAt;
-    private Date updatedAt;
+    private Integer currentPage;
+    private String notes;
+    private Date addedAt;
+    private Boolean finished;
+
 }

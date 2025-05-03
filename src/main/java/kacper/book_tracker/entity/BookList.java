@@ -1,27 +1,24 @@
 package kacper.book_tracker.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@Data
 @Entity
+@Table(name = "list")
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class Review {
+public class BookList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String text;
-    @OneToOne
-    @JoinColumn(name = "Book_user_id")
-    private UserBook userBook;
-    private String title;
-    private Integer rating;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+    private String name;
+    private String description;
     private Date createdAt;
-    private Date updatedAt;
 }
