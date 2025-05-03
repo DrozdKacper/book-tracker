@@ -1,9 +1,15 @@
 package kacper.book_tracker.service;
 
 import kacper.book_tracker.dto.RegisterUserDto;
+import kacper.book_tracker.dto.UpdateUserProfileDto;
+import kacper.book_tracker.dto.UserProfileDto;
 import kacper.book_tracker.entity.User;
+import kacper.book_tracker.mapper.UserProfileMapper;
 import kacper.book_tracker.repository.UserRepository;
+import kacper.book_tracker.security.AuthHelper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,11 +22,20 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository repository;
+    private final UserRepository repository;
+    private final UserProfileMapper userProfileMapper;
+    private final AuthHelper authHelper;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PasswordEncoder encoder;
+    public UserService(UserRepository repository,
+                       UserProfileMapper userProfileMapper, AuthHelper authHelper, PasswordEncoder passwordEncoder) {
+        this.repository = repository;
+        this.userProfileMapper = userProfileMapper;
+        this.authHelper = authHelper;
+        this.passwordEncoder = passwordEncoder;
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -30,18 +45,39 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() ->new UsernameNotFoundException("User not found: " + username));
     }
 
+    public UserProfileDto getCurrentUserProfile() {
 
-    public String registerNewUserAccount(RegisterUserDto registerUserDto) {
-        User user = new User();
-        user.setUsername(registerUserDto.getUsername());
-        user.setEmail(registerUserDto.getEmail());
-        user.setPassword(encoder.encode(registerUserDto.getPassword()));
-        user.setRole("ROLE_USER");
 
-        repository.save(user);
-
-        return "User registered successfully";
+        return userProfileMapper.toDto(getCurrentUser());
 
     }
+
+    public UserProfileDto updateUserProfile(UpdateUserProfileDto updatedUser) {
+
+        User user = getCurrentUser();
+
+        user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        user.setUsername(updatedUser.getUsername());
+
+        return userProfileMapper.toDto(repository.save(user));
+
+
+    }
+
+    public String deleteUserProfile() {
+
+        repository.delete(getCurrentUser());
+
+        return "User deleted successfully";
+
+    }
+
+    private User getCurrentUser() {
+        String email = authHelper.getCurrentUserEmail();
+
+        return repository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not fount" + email));
+    }
+
+
 
 }
