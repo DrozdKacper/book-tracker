@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "list")
@@ -21,4 +23,11 @@ public class BookList {
     private String name;
     private String description;
     private Date createdAt;
+    @OneToMany(mappedBy = "bookList", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Book> books = new ArrayList<>();
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+    }
 }

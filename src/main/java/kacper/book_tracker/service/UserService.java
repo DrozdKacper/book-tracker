@@ -72,10 +72,10 @@ public class UserService implements UserDetailsService {
 
     }
 
-    private User getCurrentUser() {
+    public User getCurrentUser() {
         String email = authHelper.getCurrentUserEmail();
 
-        return repository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not fount" + email));
+        return repository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found" + email));
     }
 
 
