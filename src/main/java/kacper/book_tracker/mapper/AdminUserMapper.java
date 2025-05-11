@@ -1,7 +1,7 @@
 package kacper.book_tracker.mapper;
 
-import kacper.book_tracker.dto.BookDto;
-import kacper.book_tracker.entity.Book;
+import kacper.book_tracker.dto.UserAdminViewDto;
+import kacper.book_tracker.entity.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,27 +10,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class BookMapper {
-
+public class AdminUserMapper {
     private final ModelMapper modelMapper;
 
+
     @Autowired
-    public BookMapper(ModelMapper modelMapper) {
+    public AdminUserMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
 
-    public BookDto toDto(Book book) {
-        return modelMapper.map(book, BookDto.class);
+    public UserAdminViewDto toDto(User user) {
+        return modelMapper.map(user, UserAdminViewDto.class);
     }
 
-    public List<BookDto> toDtoList(List<Book> books) {
-        return books.stream()
+    public List<UserAdminViewDto> toDtoList(List<User> users) {
+        return users.stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
-
-    public Book toEntity(BookDto bookDto) {
-        return modelMapper.map(bookDto, Book.class);
-    }
-
 }

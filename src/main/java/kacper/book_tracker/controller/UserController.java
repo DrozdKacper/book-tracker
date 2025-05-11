@@ -3,7 +3,6 @@ package kacper.book_tracker.controller;
 import kacper.book_tracker.dto.UpdateUserProfileDto;
 import kacper.book_tracker.dto.UserProfileDto;
 import kacper.book_tracker.service.UserService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

@@ -26,5 +26,12 @@ public class UserBook {
     private String notes;
     private Date addedAt;
     private Boolean finished;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public User getUser() {
+        return this.user;
+    }
 
 }
