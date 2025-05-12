@@ -1,6 +1,7 @@
 package kacper.book_tracker.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,9 +10,9 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "list")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class BookList {
 
     @Id

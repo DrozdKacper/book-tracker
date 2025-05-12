@@ -24,5 +24,9 @@ public class Book {
     private String genre;
     private Integer pageCount;
 
+    @ManyToOne
+    @JoinColumn(name = "book_list_id")
+    private BookList bookList;
+
 
 }
