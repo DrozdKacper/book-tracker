@@ -35,7 +35,7 @@ public class AdminBookService {
 
     public String deleteBook(int id) {
         bookRepository.deleteById(id);
-        return "User deleted successfully" + id;
+        return "Book deleted successfully: " + id;
     }
 
 }

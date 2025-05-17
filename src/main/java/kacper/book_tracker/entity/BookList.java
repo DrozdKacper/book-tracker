@@ -18,12 +18,15 @@ public class BookList {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
     private String name;
     private String description;
     private Date createdAt;
+
     @OneToMany(mappedBy = "bookList", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Book> books = new ArrayList<>();
 

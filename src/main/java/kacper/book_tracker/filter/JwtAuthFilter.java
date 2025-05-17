@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kacper.book_tracker.service.JwtService;
+import kacper.book_tracker.service.UserInfoService;
 import kacper.book_tracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,12 +20,12 @@ import java.io.IOException;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final UserService userService;
+    private final UserInfoService userInfoService;
     private final JwtService jwtService;
 
     @Autowired
-    public JwtAuthFilter(UserService userService, JwtService jwtService) {
-        this.userService = userService;
+    public JwtAuthFilter(UserInfoService userInfoService, JwtService jwtService) {
+        this.userInfoService = userInfoService;
         this.jwtService = jwtService;
     }
 
@@ -34,15 +35,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
         String token = null;
-        String username = null;
+        String email = null;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
-            username = jwtService.extractUsername(token);
+            email = jwtService.extractEmail(token);
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userService.loadUserByUsername(username);
+        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userInfoService.loadUserByUsername(email);
             if (jwtService.validateToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,

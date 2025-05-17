@@ -29,14 +29,14 @@ public class AuthController {
         return service.registerNewUserAccount(registerUserDto);
     }
 
-    @PostMapping("generateToken")
+    @PostMapping("/generateToken")
     public String authenticateAndGetToken(@RequestBody AuthRequestDto authRequestDto) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequestDto.getUsername(), authRequestDto.getPassword())
+                new UsernamePasswordAuthenticationToken(authRequestDto.getEmail(), authRequestDto.getPassword())
         );
 
         if(authentication.isAuthenticated()) {
-            return jwtService.generateToken(authRequestDto.getUsername());
+            return jwtService.generateToken(authRequestDto.getEmail());
         } else {
             throw new UsernameNotFoundException("Invalid user request");
         }

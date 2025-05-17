@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/books")
+@RequestMapping("/api/admin/books")
 public class AdminBookController {
 
     private final BookService bookService;

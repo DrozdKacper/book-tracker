@@ -1,6 +1,7 @@
 package kacper.book_tracker.config;
 
 import kacper.book_tracker.filter.JwtAuthFilter;
+import kacper.book_tracker.service.UserInfoService;
 import kacper.book_tracker.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,12 +23,12 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
 
-    private final UserService userService;
+    private final UserInfoService userInfoService;
 
 
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserService userService) {
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserInfoService userInfoService) {
         this.jwtAuthFilter = jwtAuthFilter;
-        this.userService = userService;
+        this.userInfoService = userInfoService;
     }
 
     @Bean
@@ -36,8 +37,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/todo").permitAll()
-                        .requestMatchers("/admin*").hasAuthority("admin")
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/api/books/**",
+                                "/api/book-lists/**",
+                                "/api/users/**",
+                                "/api/reviews/**").permitAll()
+                        .requestMatchers("/admin**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
@@ -53,7 +59,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userService);
+        provider.setUserDetailsService(userInfoService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }

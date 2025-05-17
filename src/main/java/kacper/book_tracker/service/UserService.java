@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService{
 
     private final UserRepository repository;
     private final UserProfileMapper userProfileMapper;
@@ -37,13 +37,7 @@ public class UserService implements UserDetailsService {
     }
 
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = repository.findByEmail(username);
 
-        return user.map(UserDetailsImpl::new)
-                .orElseThrow(() ->new UsernameNotFoundException("User not found: " + username));
-    }
 
     public UserProfileDto getCurrentUserProfile() {
 
