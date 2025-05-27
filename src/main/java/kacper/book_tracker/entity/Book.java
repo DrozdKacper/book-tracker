@@ -3,7 +3,9 @@ package kacper.book_tracker.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -24,9 +26,8 @@ public class Book {
     private String genre;
     private Integer pageCount;
 
-    @ManyToOne
-    @JoinColumn(name = "book_list_id")
-    private BookList bookList;
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserBook> userBooks = new ArrayList<>();
 
 
 }

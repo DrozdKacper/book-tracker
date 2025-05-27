@@ -3,7 +3,9 @@ package kacper.book_tracker.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -19,6 +21,9 @@ public class User {
     private String password;
     private String role;
     private Date createdAt;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserBook> userBooks = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {

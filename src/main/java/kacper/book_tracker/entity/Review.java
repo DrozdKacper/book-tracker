@@ -1,9 +1,7 @@
 package kacper.book_tracker.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
@@ -16,12 +14,29 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String text;
-    @OneToOne
-    @JoinColumn(name = "Book_user_id")
-    private UserBook userBook;
+
     private String title;
+    private String text;
     private Integer rating;
+
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
+    @OneToOne
+    @JoinColumn(name = "user_book_id")
+    private UserBook userBook;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+        updatedAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = new Date();
+    }
 }

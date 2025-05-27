@@ -1,9 +1,7 @@
 package kacper.book_tracker.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,16 +17,18 @@ public class BookList {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    private String name;
+    private String description;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String name;
-    private String description;
-    private Date createdAt;
-
     @OneToMany(mappedBy = "bookList", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Book> books = new ArrayList<>();
+    private List<UserBook> userBooks = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
