@@ -8,6 +8,8 @@ import kacper.book_tracker.mapper.ReviewMapper;
 import kacper.book_tracker.repository.ReviewRepository;
 import kacper.book_tracker.repository.UserBookRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;

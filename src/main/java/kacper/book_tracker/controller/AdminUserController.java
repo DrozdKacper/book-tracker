@@ -3,6 +3,7 @@ package kacper.book_tracker.controller;
 import kacper.book_tracker.dto.UserAdminViewDto;
 import kacper.book_tracker.service.AdminUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,19 +21,19 @@ public class AdminUserController {
 
     // GET /admin/users
     @GetMapping
-    public List<UserAdminViewDto> getAllUsers() {
-        return adminUserService.getAllUsers();
+    public ResponseEntity<List<UserAdminViewDto>> getAllUsers() {
+        return ResponseEntity.ok(adminUserService.getAllUsers());
     }
 
     // GET /admin/users/{id}
     @GetMapping("/{id}")
-    public UserAdminViewDto getUser(@PathVariable int id) {
-        return adminUserService.getUser(id);
+    public ResponseEntity<UserAdminViewDto> getUserById(@PathVariable int id) {
+        return ResponseEntity.ok(adminUserService.getUserById(id));
     }
 
     // DELETE /admin/users/{id}
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable int id) {
-        return adminUserService.deleteUser(id);
+    public ResponseEntity<String> deleteUser(@PathVariable int id) {
+        return ResponseEntity.ok(adminUserService.deleteUser(id));
     }
 }

@@ -4,6 +4,8 @@ import kacper.book_tracker.dto.ReviewRequestDto;
 import kacper.book_tracker.dto.ReviewResponseDto;
 import kacper.book_tracker.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,27 +22,27 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ReviewResponseDto addReview(@RequestBody ReviewRequestDto reviewRequestDto) {
-        return reviewService.addReview(reviewRequestDto);
+    public ResponseEntity<ReviewResponseDto> addReview(@RequestBody ReviewRequestDto reviewRequestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(reviewService.addReview(reviewRequestDto));
     }
 
     @GetMapping("/book/{id}")
-    public List<ReviewResponseDto> getReviewsByBook(@PathVariable int id) {
-        return reviewService.getReviewsByBook(id);
+    public ResponseEntity<List<ReviewResponseDto>> getReviewsByBook(@PathVariable int id) {
+        return ResponseEntity.ok(reviewService.getReviewsByBook(id));
     }
 
     @GetMapping("/{id}")
-    public ReviewResponseDto getReview(@PathVariable int id) {
-        return reviewService.getReview(id);
+    public ResponseEntity<ReviewResponseDto> getReview(@PathVariable int id) {
+        return ResponseEntity.ok(reviewService.getReview(id));
     }
 
     @PutMapping("/{id}")
-    public ReviewResponseDto changeReview(@PathVariable int id, @RequestBody ReviewRequestDto reviewRequestDto) {
-        return reviewService.changeReview(id, reviewRequestDto);
+    public ResponseEntity<ReviewResponseDto> changeReview(@PathVariable int id, @RequestBody ReviewRequestDto reviewRequestDto) {
+        return ResponseEntity.ok(reviewService.changeReview(id, reviewRequestDto));
     }
 
     @DeleteMapping("/{id}")
-    public String deleteReview(@PathVariable int id) {
-        return reviewService.deleteReview(id);
+    public ResponseEntity<String> deleteReview(@PathVariable int id) {
+        return ResponseEntity.ok(reviewService.deleteReview(id));
     }
 }

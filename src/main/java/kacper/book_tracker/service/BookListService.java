@@ -6,8 +6,9 @@ import kacper.book_tracker.entity.BookList;
 import kacper.book_tracker.entity.User;
 import kacper.book_tracker.mapper.BookListMapper;
 import kacper.book_tracker.repository.BookListRepository;
-import kacper.book_tracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class BookListService {
 
     @Autowired
     public BookListService(BookListRepository bookListRepository, BookListMapper bookListMapper,
-                           UserService userService, UserRepository userRepository) {
+                           UserService userService) {
         this.bookListRepository = bookListRepository;
         this.bookListMapper = bookListMapper;
         this.userService = userService;

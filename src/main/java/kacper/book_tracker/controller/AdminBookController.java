@@ -1,10 +1,11 @@
 package kacper.book_tracker.controller;
 
 import kacper.book_tracker.dto.BookDto;
-import kacper.book_tracker.entity.Book;
 import kacper.book_tracker.service.AdminBookService;
 import kacper.book_tracker.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,21 +25,21 @@ public class AdminBookController {
 
 
     @GetMapping
-    public List<BookDto> getAllBooksForAdmin() {
-        return bookService.getBooks();
+    public ResponseEntity<List<BookDto>> getAllBooksForAdmin() {
+        return ResponseEntity.ok(bookService.getBooks());
     }
 
     @PostMapping
-    public Book addBook(@RequestBody BookDto bookDto) {
-        return adminBookService.addBook(bookDto);
+    public ResponseEntity<BookDto> addBook(@RequestBody BookDto bookDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(adminBookService.addBook(bookDto));
     }
 
     @DeleteMapping("/{id}")
-    public String deleteBook(@PathVariable int id) {
-        return adminBookService.deleteBook(id);
+    public ResponseEntity<String> deleteBook(@PathVariable int id) {
+        return ResponseEntity.ok(adminBookService.deleteBook(id));
     }
     @PutMapping("/{id}")
-    public BookDto updateBook(@RequestBody BookDto bookDto, @PathVariable int id) {
-        return adminBookService.updateBook(bookDto, id);
+    public ResponseEntity<BookDto> updateBook(@RequestBody BookDto bookDto, @PathVariable int id) {
+        return ResponseEntity.ok(adminBookService.updateBook(bookDto, id));
     }
 }

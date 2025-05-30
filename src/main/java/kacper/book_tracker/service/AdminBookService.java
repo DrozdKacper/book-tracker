@@ -6,6 +6,8 @@ import kacper.book_tracker.mapper.BookMapper;
 import kacper.book_tracker.repository.BookRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,13 +17,15 @@ public class AdminBookService {
     private final BookRepository bookRepository;
 
     @Autowired
-    public AdminBookService(BookMapper bookMapper, BookRepository bookRepository, BookService bookService) {
+    public AdminBookService(BookMapper bookMapper, BookRepository bookRepository) {
         this.bookMapper = bookMapper;
         this.bookRepository = bookRepository;
     }
 
-    public Book addBook(BookDto bookDto) {
-        return bookRepository.save(bookMapper.toEntity(bookDto));
+    public BookDto addBook(BookDto bookDto) {
+
+        Book book = bookRepository.save(bookMapper.toEntity(bookDto));
+        return bookMapper.toDto(book);
     }
 
     public BookDto updateBook(BookDto updatedBook, int id) {

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class BookListMapper {
+
     private final ModelMapper modelMapper;
 
     @Autowired
@@ -28,7 +29,7 @@ public class BookListMapper {
 
     public BookListResponseDto toDto(BookList bookList) {
         BookListResponseDto dto = modelMapper.map(bookList, BookListResponseDto.class);
-        dto.setNumberOfBooks(bookList.getBooks().size());
+        dto.setNumberOfBooks(bookList.getUserBooks().size());
         return dto;
     }
 

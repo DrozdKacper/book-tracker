@@ -30,8 +30,6 @@ public class UserBook {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public User getUser() {
-        return this.user;
-    }
+
 
 }

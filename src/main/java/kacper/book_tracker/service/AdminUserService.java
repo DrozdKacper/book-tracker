@@ -4,6 +4,7 @@ import kacper.book_tracker.dto.UserAdminViewDto;
 import kacper.book_tracker.mapper.AdminUserMapper;
 import kacper.book_tracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,8 +25,9 @@ public class AdminUserService {
         return adminUserMapper.toDtoList(userRepository.findAll());
     }
 
-    public UserAdminViewDto getUser(int id) {
-        return adminUserMapper.toDto(userRepository.findById(id)
+    public UserAdminViewDto getUserById(int id) {
+        return adminUserMapper
+                .toDto(userRepository.findById(id)
                 .orElseThrow());
     }
 
