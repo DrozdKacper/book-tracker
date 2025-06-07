@@ -4,6 +4,8 @@ import kacper.book_tracker.dto.ReviewRequestDto;
 import kacper.book_tracker.dto.ReviewResponseDto;
 import kacper.book_tracker.entity.Review;
 import kacper.book_tracker.entity.UserBook;
+import kacper.book_tracker.exception.ReviewNotFoundException;
+import kacper.book_tracker.exception.UserBookNotFoundException;
 import kacper.book_tracker.mapper.ReviewMapper;
 import kacper.book_tracker.repository.ReviewRepository;
 import kacper.book_tracker.repository.UserBookRepository;
@@ -31,7 +33,7 @@ public class ReviewService {
     public ReviewResponseDto addReview(ReviewRequestDto dto) {
         Review review = reviewMapper.toEntity(dto);
         UserBook userBook = userBookRepository.findById(dto.getUserBookId())
-                .orElseThrow(() -> new RuntimeException("UserBook not found"));
+                .orElseThrow(() -> new UserBookNotFoundException("UserBook not found"));
         review.setUserBook(userBook);
         review.setCreatedAt(new Date());
         review.setUpdatedAt(new Date());
@@ -44,19 +46,21 @@ public class ReviewService {
 
     public ReviewResponseDto getReview(int id) {
         return reviewMapper.toDto(reviewRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Review not found")));
+                .orElseThrow(() -> new ReviewNotFoundException("Review not found")));
     }
 
     public ReviewResponseDto changeReview(int id, ReviewRequestDto dto) {
         Review existingReview = reviewRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Review not found"));
+                .orElseThrow(() -> new ReviewNotFoundException("Review not found"));
         BeanUtils.copyProperties(dto, existingReview, "id", "userBook", "createdAt");
         existingReview.setUpdatedAt(new Date());
         return reviewMapper.toDto(reviewRepository.save(existingReview));
     }
 
     public String deleteReview(int id) {
-        reviewRepository.deleteById(id);
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new ReviewNotFoundException("Review not found"));
+        reviewRepository.delete(review);
         return "Review deleted successfully";
     }
 }

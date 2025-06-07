@@ -57,4 +57,10 @@ public class GlobalExceptionHandler {
         ApiError error = new ApiError(HttpStatus.NOT_FOUND, exception.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ReviewNotFoundException.class)
+    public ResponseEntity<ApiError> handleReviewNotFound(ReviewNotFoundException exception) {
+        ApiError error = new ApiError(HttpStatus.NOT_FOUND, exception.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 }

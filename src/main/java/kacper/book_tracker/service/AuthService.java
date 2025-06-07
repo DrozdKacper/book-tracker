@@ -2,6 +2,8 @@ package kacper.book_tracker.service;
 
 import kacper.book_tracker.dto.RegisterUserDto;
 import kacper.book_tracker.entity.User;
+import kacper.book_tracker.exception.UserAlreadyExistsException;
+import kacper.book_tracker.exception.UserBookAlreadyExistsException;
 import kacper.book_tracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +18,10 @@ public class AuthService {
     private UserRepository repository;
 
     public String registerNewUserAccount(RegisterUserDto registerUserDto) {
+        repository.findByEmail(registerUserDto.getEmail()).ifPresent(user -> {
+            throw new UserAlreadyExistsException("User with email " + registerUserDto.getEmail() + " already exists");
+        });
+
         User user = new User();
         user.setUsername(registerUserDto.getUsername());
         user.setEmail(registerUserDto.getEmail());
@@ -23,8 +29,7 @@ public class AuthService {
         user.setRole("ROLE_USER");
 
         repository.save(user);
-
         return "User registered successfully";
-
     }
+
 }

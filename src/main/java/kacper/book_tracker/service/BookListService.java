@@ -4,6 +4,7 @@ import kacper.book_tracker.dto.BookListRequestDto;
 import kacper.book_tracker.dto.BookListResponseDto;
 import kacper.book_tracker.entity.BookList;
 import kacper.book_tracker.entity.User;
+import kacper.book_tracker.exception.BookListNotFoundException;
 import kacper.book_tracker.mapper.BookListMapper;
 import kacper.book_tracker.repository.BookListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class BookListService {
     public BookListRequestDto updateBookList(BookListRequestDto updatedDto, int id) {
         User user = userService.getCurrentUser();
         BookList bookList = bookListRepository.findByUserAndId(user, id)
-                .orElseThrow(() -> new RuntimeException("Book list not found"));
+                .orElseThrow(() -> new BookListNotFoundException("Book list not found"));
 
         bookList.setName(updatedDto.getName());
         bookList.setDescription(updatedDto.getDescription());
@@ -56,7 +57,7 @@ public class BookListService {
         User user = userService.getCurrentUser();
 
         BookList bookList = bookListRepository.findByUserAndId(user, id)
-                .orElseThrow(() -> new RuntimeException("Book list not found"));
+                .orElseThrow(() -> new BookListNotFoundException("Book list not found"));
 
         return bookListMapper.toDto(bookList);
     }
@@ -65,7 +66,7 @@ public class BookListService {
         User user = userService.getCurrentUser();
 
         BookList bookList = bookListRepository.findByUserAndId(user, id)
-                .orElseThrow(() -> new RuntimeException("Book list not found"));
+                .orElseThrow(() -> new BookListNotFoundException("Book list not found"));
 
         bookListRepository.delete(bookList);
 

@@ -6,6 +6,9 @@ import kacper.book_tracker.entity.Book;
 import kacper.book_tracker.entity.BookList;
 import kacper.book_tracker.entity.User;
 import kacper.book_tracker.entity.UserBook;
+import kacper.book_tracker.exception.BookListNotFoundException;
+import kacper.book_tracker.exception.BookNotFoundException;
+import kacper.book_tracker.exception.UserBookNotFoundException;
 import kacper.book_tracker.mapper.UserBookMapper;
 import kacper.book_tracker.repository.BookListRepository;
 import kacper.book_tracker.repository.BookRepository;
@@ -38,9 +41,11 @@ public class UserBookService {
     public UserBookResponseDto addBookToUserList(UserBookRequestDto userBookRequestDto) {
         User user = userService.getCurrentUser();
 
-        Book book = bookRepository.findById(userBookRequestDto.getBookId()).orElseThrow();
+        Book book = bookRepository.findById(userBookRequestDto.getBookId()).
+                orElseThrow(() -> new BookNotFoundException("Book with id: " + userBookRequestDto.getBookId() + " not found"));
 
-        BookList bookList = bookListRepository.findByUserAndId(user, userBookRequestDto.getBookListId()).orElseThrow();
+        BookList bookList = bookListRepository.findByUserAndId(user, userBookRequestDto.getBookListId())
+                .orElseThrow(() -> new BookListNotFoundException("List with id: " + userBookRequestDto.getBookListId() + " not found"));
 
         UserBook userBook = userBookMapper.toEntity(userBookRequestDto);
 
@@ -61,7 +66,7 @@ public class UserBookService {
 
        UserBook userBook =  userBookRepository.findByUserAndBookIdAndBookListId(user,
                bookId, bookListId)
-               .orElseThrow();
+               .orElseThrow(() -> new UserBookNotFoundException("User book not found"));
 
        userBookRepository.delete(userBook);
 

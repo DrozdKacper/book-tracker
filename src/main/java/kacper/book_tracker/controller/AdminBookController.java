@@ -1,5 +1,6 @@
 package kacper.book_tracker.controller;
 
+import jakarta.validation.Valid;
 import kacper.book_tracker.dto.BookDto;
 import kacper.book_tracker.service.AdminBookService;
 import kacper.book_tracker.service.BookService;
@@ -30,7 +31,7 @@ public class AdminBookController {
     }
 
     @PostMapping
-    public ResponseEntity<BookDto> addBook(@RequestBody BookDto bookDto) {
+    public ResponseEntity<BookDto> addBook(@Valid @RequestBody BookDto bookDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(adminBookService.addBook(bookDto));
     }
 
@@ -39,7 +40,7 @@ public class AdminBookController {
         return ResponseEntity.ok(adminBookService.deleteBook(id));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<BookDto> updateBook(@RequestBody BookDto bookDto, @PathVariable int id) {
+    public ResponseEntity<BookDto> updateBook(@Valid @RequestBody BookDto bookDto, @PathVariable int id) {
         return ResponseEntity.ok(adminBookService.updateBook(bookDto, id));
     }
 }

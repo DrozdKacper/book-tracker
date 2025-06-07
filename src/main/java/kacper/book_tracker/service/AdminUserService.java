@@ -1,6 +1,7 @@
 package kacper.book_tracker.service;
 
 import kacper.book_tracker.dto.UserAdminViewDto;
+import kacper.book_tracker.exception.UserNotFoundException;
 import kacper.book_tracker.mapper.AdminUserMapper;
 import kacper.book_tracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,15 @@ public class AdminUserService {
     public UserAdminViewDto getUserById(int id) {
         return adminUserMapper
                 .toDto(userRepository.findById(id)
-                .orElseThrow());
+                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found")));
     }
 
     public String deleteUser(int id) {
-        userRepository.deleteById(id);
-
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+        } else {
+            throw new UserNotFoundException("User with id " + id + " not found");
+        }
         return "User deleted successfully " + id;
     }
 }

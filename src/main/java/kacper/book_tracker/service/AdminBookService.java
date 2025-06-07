@@ -2,6 +2,7 @@ package kacper.book_tracker.service;
 
 import kacper.book_tracker.dto.BookDto;
 import kacper.book_tracker.entity.Book;
+import kacper.book_tracker.exception.BookNotFoundException;
 import kacper.book_tracker.mapper.BookMapper;
 import kacper.book_tracker.repository.BookRepository;
 import org.springframework.beans.BeanUtils;
@@ -30,7 +31,7 @@ public class AdminBookService {
 
     public BookDto updateBook(BookDto updatedBook, int id) {
         Book existingBook = bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new BookNotFoundException("Book with id " + id + " not found"));
 
         BeanUtils.copyProperties(updatedBook, existingBook, "id");
         bookRepository.save(existingBook);
@@ -38,7 +39,12 @@ public class AdminBookService {
     }
 
     public String deleteBook(int id) {
-        bookRepository.deleteById(id);
+        if (bookRepository.existsById(id)) {
+            bookRepository.deleteById(id);
+        } else {
+            throw new BookNotFoundException("Book with id " + id + " not found");
+        }
+
         return "Book deleted successfully: " + id;
     }
 

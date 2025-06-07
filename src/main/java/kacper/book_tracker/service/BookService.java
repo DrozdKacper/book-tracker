@@ -2,6 +2,7 @@ package kacper.book_tracker.service;
 
 import kacper.book_tracker.dto.BookDto;
 import kacper.book_tracker.entity.Book;
+import kacper.book_tracker.exception.BookNotFoundException;
 import kacper.book_tracker.mapper.BookMapper;
 import kacper.book_tracker.repository.BookRepository;
 import org.modelmapper.ModelMapper;
@@ -31,7 +32,7 @@ public class BookService {
     public BookDto getBook(int id) {
 
         return bookMapper.toDto(bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found")));
+                .orElseThrow(() -> new BookNotFoundException("Book with id " + id +" not found")));
     }
 
 
