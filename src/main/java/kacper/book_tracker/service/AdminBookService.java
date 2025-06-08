@@ -2,11 +2,13 @@ package kacper.book_tracker.service;
 
 import kacper.book_tracker.dto.BookDto;
 import kacper.book_tracker.entity.Book;
+import kacper.book_tracker.exception.BookAlreadyExistsException;
 import kacper.book_tracker.exception.BookNotFoundException;
 import kacper.book_tracker.mapper.BookMapper;
 import kacper.book_tracker.repository.BookRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,8 +27,12 @@ public class AdminBookService {
 
     public BookDto addBook(BookDto bookDto) {
 
-        Book book = bookRepository.save(bookMapper.toEntity(bookDto));
-        return bookMapper.toDto(book);
+        try {
+            Book book = bookRepository.save(bookMapper.toEntity(bookDto));
+            return bookMapper.toDto(book);
+        } catch (DataIntegrityViolationException e) {
+            throw new BookAlreadyExistsException("Book already exists " + bookDto.getAuthor() + " " + bookDto.getTitle());
+        }
     }
 
     public BookDto updateBook(BookDto updatedBook, int id) {
@@ -41,11 +47,11 @@ public class AdminBookService {
     public String deleteBook(int id) {
         if (bookRepository.existsById(id)) {
             bookRepository.deleteById(id);
+            return "Book deleted successfully: " + id;
         } else {
             throw new BookNotFoundException("Book with id " + id + " not found");
         }
 
-        return "Book deleted successfully: " + id;
     }
 
 }

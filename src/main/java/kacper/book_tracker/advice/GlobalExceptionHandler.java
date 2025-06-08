@@ -63,4 +63,10 @@ public class GlobalExceptionHandler {
         ApiError error = new ApiError(HttpStatus.NOT_FOUND, exception.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(BookAlreadyExistsException.class)
+    public ResponseEntity<ApiError> handleBookAlreadyExists(BookAlreadyExistsException exception) {
+        ApiError error = new ApiError(HttpStatus.CONFLICT, exception.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
 }
