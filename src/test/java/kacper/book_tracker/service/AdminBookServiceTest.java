@@ -80,6 +80,7 @@ public class AdminBookServiceTest {
             adminBookService.addBook(bookDto);
         });
 
+        assertEquals("Book already exists George Orwell 1984", exception.getMessage());
 
 
     }
@@ -133,6 +134,16 @@ public class AdminBookServiceTest {
         assertEquals("Book deleted successfully: " + 1, result);
         verify(bookRepository).deleteById(1);
 
+    }
+
+    @Test
+    void deleteBookShouldThrowBookNotFoundExceptionWhenBookNotFound() {
+        when(bookRepository.existsById(100)).thenReturn(false);
+
+        BookNotFoundException exception = assertThrows(BookNotFoundException.class, () ->{
+            adminBookService.deleteBook(100);
+        });
+        assertEquals("Book with id 100 not found", exception.getMessage());
     }
 
 
