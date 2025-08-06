@@ -1,9 +1,12 @@
 package kacper.book_tracker.mapper;
 
 import kacper.book_tracker.dto.BookDto;
+import kacper.book_tracker.dto.BookListItemDto;
 import kacper.book_tracker.entity.Book;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,6 +23,7 @@ public class BookMapper {
     }
 
     public BookDto toDto(Book book) {
+
         return modelMapper.map(book, BookDto.class);
     }
 
@@ -34,3 +38,9 @@ public class BookMapper {
     }
 
 }
+
+
+
+
+
+

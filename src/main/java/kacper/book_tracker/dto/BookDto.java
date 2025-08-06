@@ -18,6 +18,7 @@ public class BookDto {
     private Date publicationDate;
     private String genre;
     private Integer pageCount;
+    private double averageRating;
 
 
 }

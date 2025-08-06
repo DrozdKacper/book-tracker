@@ -3,8 +3,14 @@ package kacper.book_tracker.controller;
 import kacper.book_tracker.dto.UserAdminViewDto;
 import kacper.book_tracker.service.AdminUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+
 
 import java.util.List;
 
@@ -21,8 +27,8 @@ public class AdminUserController {
 
     // GET /admin/users
     @GetMapping
-    public ResponseEntity<List<UserAdminViewDto>> getAllUsers() {
-        return ResponseEntity.ok(adminUserService.getAllUsers());
+    public ResponseEntity<Page<UserAdminViewDto>> getAllUsers(Pageable pageable) {
+        return ResponseEntity.ok(adminUserService.getAllUsers(pageable));
     }
 
     // GET /admin/users/{id}

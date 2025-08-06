@@ -24,12 +24,12 @@ public class AdminBookController {
         this.adminBookService = adminBookService;
     }
 
-
+    /*
     @GetMapping
     public ResponseEntity<List<BookDto>> getAllBooksForAdmin() {
         return ResponseEntity.ok(bookService.getBooks());
     }
-
+    */
     @PostMapping
     public ResponseEntity<BookDto> addBook(@Valid @RequestBody BookDto bookDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(adminBookService.addBook(bookDto));

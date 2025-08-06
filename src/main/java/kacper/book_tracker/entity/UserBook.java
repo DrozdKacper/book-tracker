@@ -21,7 +21,6 @@ public class UserBook {
     @ManyToOne
     @JoinColumn(name ="list_id")
     private BookList bookList;
-    private Integer rating;
     private Integer currentPage;
     private String notes;
     private Date addedAt;
@@ -29,7 +28,7 @@ public class UserBook {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-
+    @OneToOne(mappedBy = "userBook", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Review review;
 
 }

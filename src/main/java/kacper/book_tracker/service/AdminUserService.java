@@ -1,10 +1,13 @@
 package kacper.book_tracker.service;
 
 import kacper.book_tracker.dto.UserAdminViewDto;
+import kacper.book_tracker.entity.User;
 import kacper.book_tracker.exception.UserNotFoundException;
 import kacper.book_tracker.mapper.AdminUserMapper;
 import kacper.book_tracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +24,9 @@ public class AdminUserService {
         this.adminUserMapper = adminUserMapper;
     }
 
-    public List<UserAdminViewDto> getAllUsers() {
-
-        return adminUserMapper.toDtoList(userRepository.findAll());
+    public Page<UserAdminViewDto> getAllUsers(Pageable pageable) {
+        Page<User> page = userRepository.findAll(pageable);
+        return adminUserMapper.toDtoPage(page);
     }
 
     public UserAdminViewDto getUserById(int id) {
