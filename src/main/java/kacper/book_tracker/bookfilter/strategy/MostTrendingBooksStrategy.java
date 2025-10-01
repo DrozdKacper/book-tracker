@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class MostTrendingBooksStrategy implements BookFilterStrategy{
 
@@ -19,6 +21,7 @@ public class MostTrendingBooksStrategy implements BookFilterStrategy{
 
     @Override
     public Page<BookListItemDto> filterBooks(Pageable pageable) {
-        return reviewRepository.findMostTrending(pageable);
+        LocalDateTime last30days = LocalDateTime.now().minusDays(30);
+        return reviewRepository.findMostTrending(last30days, pageable);
     }
 }

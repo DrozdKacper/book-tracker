@@ -16,29 +16,31 @@ import java.util.Optional;
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
     List<Review> findAllByUserBook_Id(int userBookId);
 
-    @Query("SELECT AVG(r.rating) FROM Review r WHERE r.book.id = :bookId")
+    @Query("SELECT AVG(r.rating) FROM Review r WHERE r.userBook.book.id = :bookId")
     Double findAverageRatingForBook(@Param("bookId") int bookId);
 
     @Query("""
-            SELECT new kacper.book_tracker.dto.BookListItemDto(
-                b.id, b.title, b.author, b.genre, AVG(r.rating), COUNT(r.id)
-            )
-            FROM Book b
-            LEFT JOIN b.reviews r
-            GROUP BY b.id, b.title, b.author, b.genre
-            ORDER BY COUNT(r.id) DESC
-    """)
+    SELECT new kacper.book_tracker.dto.BookListItemDto(
+        b.id, b.title, b.author, b.genre, AVG(r.rating), COUNT(r.id)
+    )
+    FROM Book b
+    JOIN b.userBooks ub
+    LEFT JOIN ub.review r
+    GROUP BY b.id, b.title, b.author, b.genre
+    ORDER BY COUNT(r.id) DESC
+""")
     Page<BookListItemDto> findAllOrderByReviewCountDesc(Pageable pageable);
 
     @Query("""
-            SELECT new kacper.book_tracker.dto.BookListItemDto(
-                b.id, b.title, b.author, b.genre, AVG(r.rating), COUNT(r.id)
-            )
-            FROM Book b
-            LEFT JOIN b.reviews r
-            GROUP BY b.id, b.title, b.author, b.genre
-            ORDER BY AVG(r.rating) DESC
-    """)
+    SELECT new kacper.book_tracker.dto.BookListItemDto(
+        b.id, b.title, b.author, b.genre, AVG(r.rating), COUNT(r.id)
+    )
+    FROM Book b
+    JOIN b.userBooks ub
+    LEFT JOIN ub.review r
+    GROUP BY b.id, b.title, b.author, b.genre
+    ORDER BY AVG(r.rating) DESC
+""")
     Page<BookListItemDto> findAllOrderByAverageRatingDesc(Pageable pageable);
 
     @Query("""
@@ -46,22 +48,24 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
         b.id, b.title, b.author, b.genre, AVG(r.rating), COUNT(r.id)
     )
     FROM Book b
-    LEFT JOIN b.reviews r
-    
+    JOIN b.userBooks ub
+    LEFT JOIN ub.review r ON r.createdAt >= :fromDate
     GROUP BY b.id, b.title, b.author, b.genre
     ORDER BY COUNT(r.id) DESC
-    """)
-    Page<BookListItemDto> findMostTrending(Pageable pageable);
+""")
+    Page<BookListItemDto> findMostTrending(@Param("fromDate") java.time.LocalDateTime fromDate,
+                                           Pageable pageable);
 
     @Query("""
-            SELECT new kacper.book_tracker.dto.BookListItemDto(
-                b.id, b.title, b.author, b.genre, AVG(r.rating), COUNT(r.id)
-            )
-            FROM Book b
-            LEFT JOIN b.reviews r
-            GROUP BY b.id, b.title, b.author, b.genre
-            ORDER BY b.publicationDate DESC
-    """)
+    SELECT new kacper.book_tracker.dto.BookListItemDto(
+        b.id, b.title, b.author, b.genre, AVG(r.rating), COUNT(r.id)
+    )
+    FROM Book b
+    JOIN b.userBooks ub
+    LEFT JOIN ub.review r
+    GROUP BY b.id, b.title, b.author, b.genre, b.publicationDate
+    ORDER BY b.publicationDate DESC
+""")
     Page<BookListItemDto> findAllOrderByPublicationDateDesc(Pageable pageable);
 
 
